@@ -1,0 +1,30 @@
+<component name="ArtifactManager">
+  <artifact name="zhuhuihuihui-project:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/zhuhuihuihui_project_jar</output-path>
+    <root id="root">
+      <element id="archive" name="zhuhuihuihui-project.jar">
+        <element id="module-output" name="zhuhuihuihui-project" />
+      </element>
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-util:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.7.12" />
+      <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.12" />
+      <element id="library" level="project" name="Maven: com.sparkjava:spark-core:2.3" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-security:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.freemarker:freemarker:2.3.19" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-webapp:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty.websocket:websocket-client:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-server:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: com.heroku.sdk:heroku-jdbc:0.1.1" />
+      <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-servlet:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty.websocket:websocket-server:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-io:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-http:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: com.sparkjava:spark-template-freemarker:2.0.0" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-xml:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.3.2.v20150730" />
+      <element id="library" level="project" name="Maven: org.eclipse.jetty.websocket:websocket-servlet:9.3.2.v20150730" />
+    </root>
+  </artifact>
+</component>

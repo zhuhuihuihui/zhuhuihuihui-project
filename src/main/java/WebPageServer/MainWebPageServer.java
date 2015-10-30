@@ -1,5 +1,6 @@
 package WebPageServer;
 
+import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.staticFileLocation;
 
@@ -8,9 +9,10 @@ import static spark.Spark.staticFileLocation;
  */
 public class MainWebPageServer {
     public static void main(String[] args) {
-        port(Integer.valueOf(System.getenv("PORT")));
+//        port(Integer.valueOf(System.getenv("PORT")));
+        port(8080);
         staticFileLocation("/public");
 
-        
+        get("/", (req, res) -> "Hello World");
     }
 }
