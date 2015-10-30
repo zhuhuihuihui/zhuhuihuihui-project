@@ -10,6 +10,7 @@ public class MainWebPageServer {
     public static void main(String[] args) {
         port(Integer.valueOf(System.getenv("PORT")));
         staticFileLocation("/public");
+
         
     }
 }
