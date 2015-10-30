@@ -7,8 +7,7 @@ import static spark.Spark.staticFileLocation;
  */
 public class MainWebPageServer {
     public static void main(String[] args) {
-//        port(Integer.valueOf(System.getenv("PORT")));
-        port(8080);
+        port(Integer.valueOf(System.getenv("PORT") == null ? "8080": System.getenv("PORT")));
         staticFileLocation("/public");
 
         get("/", (req, res) -> "Hello World");
