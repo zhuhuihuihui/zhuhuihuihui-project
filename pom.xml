@@ -64,7 +64,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>WebPageServer.MainWebPageServer</mainClass>
+                            <mainClass>MainWebPageServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
