@@ -8,8 +8,7 @@
 * Login
 
     *Request*
-    
-    `POST /login?email=youremail&password=yourpassword&device=theDeviceYouAreCallingThisAPIFrom`
+    `POST /login`
     
     Parameters   | Data Type     | Required / Optional | Description
     ------------ | ------------- | ------------------- | -----------
@@ -18,7 +17,6 @@
     device       | string        | Required            | the device you are calling this API from
     
     *Response*
-
 ```json
     {
         "success": true,
@@ -36,11 +34,20 @@
 * Registration
 
     *Request*
+    `POST /signup`
     
-    `POST /login?email=youremail&password=yourpassword&device=theDeviceYouAreCallingThisAPIFrom`
+    Parameters   | Data Type     | Required / Optional | Description
+    ------------ | ------------- | ------------------- | -----------
+    email        | string        | Required            | your email address
+    password     | string        | Required            | your password
+    device       | string        | Required            | the device you are calling this API from
+    nickname     | string        | Optional            | Your nickname
+    birthday     | string        | Optional            | Must be in `mm/dd/yyyy`format, otherwise will be put `NULL`
+    gender       | string        | Optional            | Must be either `Male`, `Female` or `Neutral`, otherwise will be put `NULL`
+    fromCity     | string        | Optional            | Your hometown
+    avatorUrl    | string        | Optional            | put avator link here
     
     *Response*
-
 ```json
     {
         "success": true,
@@ -51,7 +58,7 @@
 ```json
     {
         "success": false,
-        "error": "This user does not exist!"
+        "error": "Error message showing that why it didn't sign up successfully"
     }
 ```
 

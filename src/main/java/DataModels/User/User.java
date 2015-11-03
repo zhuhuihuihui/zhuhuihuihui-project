@@ -16,6 +16,11 @@ public class User {
     private String fromCity;
     private String university;
     private URL avatorUrl;
+    private String token;
 
 
+    public static boolean login(String email, String password) {
+
+        return false;
+    }
 }
