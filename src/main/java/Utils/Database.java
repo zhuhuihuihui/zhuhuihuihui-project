@@ -44,18 +44,19 @@ public class Database {
             try {
 //                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE
 //                        + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-//                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
-                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE;
+                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE
+                        + "?reconnect=true&autoReconnect=true&wait_timeout=28800&interactive_timeout=28800&maxReconnects=10";
+//                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE;
                 Class.forName("com.mysql.jdbc.Driver");
                 database.boneCPConfig = new BoneCPConfig();
                 database.boneCPConfig.setJdbcUrl(dbUrl);
                 database.boneCPConfig.setUsername(database.MYSQL_USERNAME);
                 database.boneCPConfig.setPassword(database.MYSQL_PASSWORD);
-                database.boneCPConfig.setMinConnectionsPerPartition(5);
-                database.boneCPConfig.setMaxConnectionsPerPartition(10);
+                database.boneCPConfig.setMinConnectionsPerPartition(2);
+                database.boneCPConfig.setMaxConnectionsPerPartition(5);
                 database.boneCPConfig.setPartitionCount(1);
-                database.boneCPConfig.setIdleConnectionTestPeriodInSeconds(10);
-                database.boneCPConfig.setConnectionTestStatement("SELECT 1");
+//                database.boneCPConfig.setIdleConnectionTestPeriodInSeconds(80);
+//                database.boneCPConfig.setConnectionTestStatement("SELECT 1");
 //                database.boneCPConfig.setConnectionTimeout(8, TimeUnit.HOURS);
                 database.boneConnectionPool = new BoneCP(database.boneCPConfig);
             } catch (ClassNotFoundException|SQLException e) {
@@ -63,6 +64,8 @@ public class Database {
                 database = null;
                 return null;
             }
+        } else {
+            database.keepAlive();
         }
         return database;
     }
@@ -156,5 +159,19 @@ public class Database {
             }
         }
         return true;
+    }
+
+    private void keepAlive() {
+        Connection connection = this.getConnection();
+        if (null != connection) {
+            try {
+                Statement statement = connection.createStatement();
+                statement.executeQuery("Select 1");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                if (null != connection) { try {connection.close();} catch (SQLException e) { e.printStackTrace();}}
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Scott on 10/31/15.
@@ -38,7 +39,7 @@ public class User {
         }
 
         if (null != userParamsMap.get("birthday")) {
-            DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date birthday = dateFormat.parse(String.valueOf(((String[])userParamsMap.get("birthday"))[0]));
                 this.birthday = birthday;
@@ -67,6 +68,8 @@ public class User {
                 this.avatorUrl = null;
             }
         }
+
+        this.token = UUID.randomUUID().toString();
     }
 
 
