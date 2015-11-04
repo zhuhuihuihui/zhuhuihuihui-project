@@ -44,8 +44,8 @@ public class Database {
             try {
 //                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE
 //                        + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
-//                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE;
+//                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
+                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE;
                 Class.forName("com.mysql.jdbc.Driver");
                 database.boneCPConfig = new BoneCPConfig();
                 database.boneCPConfig.setJdbcUrl(dbUrl);
@@ -54,8 +54,9 @@ public class Database {
                 database.boneCPConfig.setMinConnectionsPerPartition(5);
                 database.boneCPConfig.setMaxConnectionsPerPartition(10);
                 database.boneCPConfig.setPartitionCount(1);
+                database.boneCPConfig.setIdleConnectionTestPeriodInSeconds(10);
                 database.boneCPConfig.setConnectionTestStatement("SELECT 1");
-                database.boneCPConfig.setConnectionTimeout(8, TimeUnit.HOURS);
+//                database.boneCPConfig.setConnectionTimeout(8, TimeUnit.HOURS);
                 database.boneConnectionPool = new BoneCP(database.boneCPConfig);
             } catch (ClassNotFoundException|SQLException e) {
                 e.printStackTrace();
@@ -96,12 +97,12 @@ public class Database {
         return null;
     }
 
-    public boolean isUserExistInTheUserTable(User user) {
+    public boolean isUserExistInTheUserTable(User user) throws SQLException {
         if (null == user || null == user.getEmail() || user.getEmail().isEmpty()) return false;
         return isUserExistInTheUserTable(user.getEmail());
     }
 
-    public boolean isUserExistInTheUserTable(String email) {
+    public boolean isUserExistInTheUserTable(String email) throws SQLException {
         Connection connection = this.getConnection();
         if (null != connection) {
             try {
@@ -110,16 +111,16 @@ public class Database {
                 if (resultSet.next()) {
                     return true;
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             } finally {
-                try { if (null != connection) connection.close();} catch (SQLException e) { e.printStackTrace();}
+                if (null != connection) {
+                    connection.close();
+                }
             }
         }
         return false;
     }
 
-    public boolean insertUserIntoUserTable(User user) {
+    public boolean insertUserIntoUserTable(User user) throws SQLException {
         Connection connection = this.getConnection();
         if (null != connection) {
             try {
@@ -147,11 +148,11 @@ public class Database {
 //                        " (NULL, " + user.getNickname() + ", " + user.getEmail() + ", " + user.getPassword() + ", " +
 //                        new Date(user.getBirthday().getTime()) + ", " + user.getGender() + ", " + user.getFromCity() +
 //                        ", " + user.getUniversity() + ", " + user.getAvatorUrl().toString() + ", NULL, false);");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
+
             } finally {
-                try { if (null != connection) connection.close();} catch (SQLException e) { e.printStackTrace();}
+                if (null != connection) {
+                    connection.close();
+                }
             }
         }
         return true;

@@ -2,6 +2,8 @@ import DataModels.User.User;
 import Utils.Database;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.json.simple.JSONObject;
+
+import java.sql.SQLException;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -60,14 +62,21 @@ public class MainApiServer {
             }
 
             /** 3. Check if it's existing user */
-            if (Database.getInstance().isUserExistInTheUserTable(user)) {
+            try {
+                if (Database.getInstance().isUserExistInTheUserTable(user)) {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("error", "Email already exist.");
+                    return jsonResponse.toJSONString();
+                }
+
+
+                Database.getInstance().insertUserIntoUserTable(user);
+            } catch (SQLException e) {
+                e.printStackTrace();
                 jsonResponse.put("success", false);
-                jsonResponse.put("error", "Email already exist.");
+                jsonResponse.put("error", "Backend database error, request is not being proceed.");
                 return jsonResponse.toJSONString();
             }
-
-
-            Database.getInstance().insertUserIntoUserTable(user);
 
 
             jsonResponse.put("success", true);
