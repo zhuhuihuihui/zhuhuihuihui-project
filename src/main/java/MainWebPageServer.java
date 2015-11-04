@@ -1,3 +1,9 @@
+import spark.ModelAndView;
+import spark.template.freemarker.FreeMarkerEngine;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.staticFileLocation;
@@ -11,5 +17,12 @@ public class MainWebPageServer {
         staticFileLocation("/public");
 
         get("/", (req, res) -> "Hello World");
+
+        get("/signup", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("message", "Signup page!");
+
+            return new ModelAndView(attributes, "index.ftl");
+        }, new FreeMarkerEngine());
     }
 }
