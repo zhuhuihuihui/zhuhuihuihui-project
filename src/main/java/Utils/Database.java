@@ -18,7 +18,7 @@ public class Database {
     private String MYSQL_HOST = "us-cdbr-iron-east-03.cleardb.net";
     private String MYSQL_USERNAME = "b1f4e4b30642ef";
     private String MYSQL_PASSWORD = "e1468f68";
-    private String MYSQL_DATABASE = "heroku_ae5c2294800a104";
+    private String MYSQL_DATABASE = "/heroku_ae5c2294800a104";
 
     private BoneCPConfig boneCPConfig = null;
     private BoneCP boneConnectionPool = null;
@@ -48,7 +48,7 @@ public class Database {
 //                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE
 //                        + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
 //                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
-                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE;
+                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE;
                 Class.forName("com.mysql.jdbc.Driver");
                 database.boneCPConfig = new BoneCPConfig();
                 database.boneCPConfig.setJdbcUrl(dbUrl);
