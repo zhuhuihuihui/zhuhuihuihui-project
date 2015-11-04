@@ -7,6 +7,7 @@ import com.jolbox.bonecp.BoneCPConfig;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Scott on 10/31/15.
@@ -54,6 +55,7 @@ public class Database {
                 database.boneCPConfig.setMaxConnectionsPerPartition(10);
                 database.boneCPConfig.setPartitionCount(1);
                 database.boneCPConfig.setConnectionTestStatement("SELECT 1");
+                database.boneCPConfig.setConnectionTimeout(8, TimeUnit.HOURS);
                 database.boneConnectionPool = new BoneCP(database.boneCPConfig);
             } catch (ClassNotFoundException|SQLException e) {
                 e.printStackTrace();
