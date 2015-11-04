@@ -43,7 +43,8 @@ public class Database {
             try {
 //                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE
 //                        + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
+//                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
+                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE;
                 Class.forName("com.mysql.jdbc.Driver");
                 database.boneCPConfig = new BoneCPConfig();
                 database.boneCPConfig.setJdbcUrl(dbUrl);
