@@ -34,10 +34,6 @@ public class Database {
                     database.MYSQL_USERNAME = dbUri.getUserInfo().split(":")[0];
                     database.MYSQL_PASSWORD = dbUri.getUserInfo().split(":")[1];
                     database.MYSQL_DATABASE = dbUri.getPath();
-                    System.out.println("---------" + database.MYSQL_HOST);
-                    System.out.println("---------" + database.MYSQL_USERNAME);
-                    System.out.println("---------" + database.MYSQL_PASSWORD);
-                    System.out.println("---------" + database.MYSQL_DATABASE);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                     database = null;
@@ -47,8 +43,8 @@ public class Database {
             try {
 //                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE
 //                        + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-//                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + "/"+ database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
-                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE;
+                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE + "?reconnect=true&autoReconnect=true";
+//                String dbUrl = "jdbc:mysql://" + database.MYSQL_HOST + database.MYSQL_DATABASE;
                 Class.forName("com.mysql.jdbc.Driver");
                 database.boneCPConfig = new BoneCPConfig();
                 database.boneCPConfig.setJdbcUrl(dbUrl);
