@@ -34,6 +34,10 @@ public class Database {
                     database.MYSQL_USERNAME = dbUri.getUserInfo().split(":")[0];
                     database.MYSQL_PASSWORD = dbUri.getUserInfo().split(":")[1];
                     database.MYSQL_DATABASE = dbUri.getPath();
+                    System.out.println("---------" + database.MYSQL_HOST);
+                    System.out.println("---------" + database.MYSQL_USERNAME);
+                    System.out.println("---------" + database.MYSQL_PASSWORD);
+                    System.out.println("---------" + database.MYSQL_DATABASE);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                     database = null;
