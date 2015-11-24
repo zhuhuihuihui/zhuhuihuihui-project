@@ -14,6 +14,7 @@ import java.util.UUID;
  */
 
 public class User {
+    private int userID = -1;
     private String nickname = null;
     private String email = null;
     private String password = null;
@@ -72,10 +73,12 @@ public class User {
         this.token = UUID.randomUUID().toString();
     }
 
+    public int getUserID() {
+        return userID;
+    }
 
-    public static boolean login(String email, String password) {
-
-        return false;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getNickname() {

@@ -100,6 +100,26 @@ public class Database {
         return null;
     }
 
+    public boolean checkUserPasswordMatches(User user) throws SQLException {
+        if (null == user || null == user.getEmail() || user.getEmail().isEmpty()) return false;
+        Connection connection = this.getConnection();
+        if (null != connection) {
+            try {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("Select * from user where email = '" + user.getEmail() +
+                        "' AND password = '" + user.getPassword() + "';");
+                if (resultSet.next()) {
+                    return true;
+                }
+            } finally {
+                if (null != connection) {
+                    connection.close();
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isUserExistInTheUserTable(User user) throws SQLException {
         if (null == user || null == user.getEmail() || user.getEmail().isEmpty()) return false;
         return isUserExistInTheUserTable(user.getEmail());
