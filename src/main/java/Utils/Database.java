@@ -100,8 +100,8 @@ public class Database {
         return null;
     }
 
-    public boolean checkUserPasswordMatches(User user) throws SQLException {
-        if (null == user || null == user.getEmail() || user.getEmail().isEmpty()) return false;
+    public User checkUserPasswordMatches(User user) throws SQLException {
+        if (null == user || null == user.getEmail() || user.getEmail().isEmpty()) return null;
         Connection connection = this.getConnection();
         if (null != connection) {
             try {
@@ -109,7 +109,25 @@ public class Database {
                 ResultSet resultSet = statement.executeQuery("Select * from user where email = '" + user.getEmail() +
                         "' AND password = '" + user.getPassword() + "';");
                 if (resultSet.next()) {
-                    return true;
+                    user.setUserID(resultSet.getInt("id"));
+                } else {
+                    return null;
+                }
+                resultSet = statement.executeQuery("Select * from token where userID = '" + user.getUserID() +
+                        "' AND device = '" + user.getDevice() + "';");
+                if (resultSet.next()) {
+                    user.setToken(resultSet.getString("token"));
+                } else {
+                    String createTokenStatement =
+                            "Insert Into `token` (`tokenID`, `userID`, `token`, `device`) " +
+                                    "values " +
+                                    "(?, ?, ?, ?);";
+                    PreparedStatement preparedCreateTokenStatement = connection.prepareStatement(createTokenStatement);
+                    preparedCreateTokenStatement.setNull(1, Types.INTEGER);
+                    preparedCreateTokenStatement.setInt(2, user.getUserID());
+                    preparedCreateTokenStatement.setString(3, user.getToken());
+                    preparedCreateTokenStatement.setString(4, user.getDevice());
+                    preparedCreateTokenStatement.execute();
                 }
             } finally {
                 if (null != connection) {
@@ -117,7 +135,7 @@ public class Database {
                 }
             }
         }
-        return false;
+        return user;
     }
 
     public boolean isUserExistInTheUserTable(User user) throws SQLException {
@@ -148,10 +166,10 @@ public class Database {
         if (null != connection) {
             try {
                 String insertStatement =
-                        "Insert Into `user` (`id`, `nickname`, `email`, `password`, `birthday`, `gender`, `fromCity`, `university`, `avatorUrl`, `token`, `isEmailVarified`) " +
+                        "Insert Into `user` (`id`, `nickname`, `email`, `password`, `birthday`, `gender`, `fromCity`, `university`, `avatorUrl`, `isEmailVarified`) " +
                         "values " +
-                        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-                PreparedStatement preparedStatement = connection.prepareStatement(insertStatement);
+                        "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setNull(1, Types.INTEGER);
                 preparedStatement.setString(2, user.getNickname());
                 preparedStatement.setString(3, user.getEmail());
@@ -161,8 +179,7 @@ public class Database {
                 preparedStatement.setString(7, user.getFromCity());
                 preparedStatement.setString(8, user.getUniversity());
                 preparedStatement.setString(9, null == user.getAvatorUrl()? null: user.getAvatorUrl().toString());
-                preparedStatement.setString(10, user.getToken());
-                preparedStatement.setBoolean(11, user.isEmailVarified());
+                preparedStatement.setBoolean(10, user.isEmailVarified());
 
                 preparedStatement.execute();
 //                ResultSet resultSet = statement.executeQuery("Insert Into `user` " +
@@ -171,6 +188,26 @@ public class Database {
 //                        " (NULL, " + user.getNickname() + ", " + user.getEmail() + ", " + user.getPassword() + ", " +
 //                        new Date(user.getBirthday().getTime()) + ", " + user.getGender() + ", " + user.getFromCity() +
 //                        ", " + user.getUniversity() + ", " + user.getAvatorUrl().toString() + ", NULL, false);");
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        user.setUserID(generatedKeys.getInt(1));
+                        System.out.println(user.getUserID());
+                        //insert token
+                        String createTokenStatement =
+                                "Insert Into `token` (`tokenID`, `userID`, `token`, `device`) " +
+                                        "values " +
+                                        "(?, ?, ?, ?);";
+                        PreparedStatement preparedCreateTokenStatement = connection.prepareStatement(createTokenStatement);
+                        preparedCreateTokenStatement.setNull(1, Types.INTEGER);
+                        preparedCreateTokenStatement.setInt(2, user.getUserID());
+                        preparedCreateTokenStatement.setString(3, user.getToken());
+                        preparedCreateTokenStatement.setString(4, user.getDevice());
+                        preparedCreateTokenStatement.execute();
+                    } else {
+                        //TODO: Remove user just added
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
 
             } finally {
                 if (null != connection) {
@@ -179,6 +216,10 @@ public class Database {
             }
         }
         return true;
+    }
+
+    public boolean createTokenForUser(User user) throws SQLException {
+        return false;
     }
 
     private void keepAlive() {

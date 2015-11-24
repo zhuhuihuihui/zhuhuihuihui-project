@@ -25,6 +25,7 @@ public class User {
     private URL avatorUrl = null;
     private String token = null;
     private boolean isEmailVarified = false;
+    private String device = null;
 
     public User(Map userParamsMap) {
         if (null != userParamsMap.get("nickname")) {
@@ -55,7 +56,7 @@ public class User {
         }
 
         if (null != userParamsMap.get("fromCity")) {
-            this.fromCity = String.valueOf(((String[])userParamsMap.get("fromCity"))[0]);
+            this.fromCity = String.valueOf(((String[]) userParamsMap.get("fromCity"))[0]);
         }
 
         if (null != userParamsMap.get("university")) {
@@ -68,6 +69,10 @@ public class User {
             } catch (MalformedURLException e) {
                 this.avatorUrl = null;
             }
+        }
+
+        if (null != userParamsMap.get("device")) {
+            this.device = String.valueOf(((String[])userParamsMap.get("device"))[0]);
         }
 
         this.token = UUID.randomUUID().toString();
@@ -117,7 +122,15 @@ public class User {
         return token;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public boolean isEmailVarified() {
         return isEmailVarified;
+    }
+
+    public String getDevice() {
+        return device;
     }
 }

@@ -26,14 +26,14 @@ public class MainApiServer {
 
             JSONObject jsonResponse = new JSONObject();
             /** 1. Check missing fields */
-            if (null == user.getEmail() || null == user.getPassword() || !paramsMap.containsKey("device")) {
+            if (null == user.getEmail() || null == user.getPassword() || null == user.getDevice()) {
                 jsonResponse.put("success", false);
                 String missingField = null;
                 if (null == user.getEmail()) {
                     missingField = "email";
                 } else if (null == user.getPassword()) {
                     missingField = "password";
-                } else if (!paramsMap.containsKey("device")) {
+                } else if (null == user.getDevice()) {
                     missingField = "device";
                 }
                 jsonResponse.put("error", "Field " + missingField + " is required.");
@@ -61,9 +61,10 @@ public class MainApiServer {
                     return jsonResponse.toJSONString();
                 }
 
-                if (Database.getInstance().checkUserPasswordMatches(user)) {
+                user = Database.getInstance().checkUserPasswordMatches(user);
+                if (null != user) {
                     jsonResponse.put("success", true);
-                    jsonResponse.put("token", "A token should be here");
+                    jsonResponse.put("token", user.getToken());
                     return jsonResponse.toJSONString();
                 } else {
                     jsonResponse.put("success", false);
@@ -92,14 +93,14 @@ public class MainApiServer {
 
             JSONObject jsonResponse = new JSONObject();
             /** 1. Check missing fields */
-            if (null == user.getEmail() || null == user.getPassword() || !paramsMap.containsKey("device")) {
+            if (null == user.getEmail() || null == user.getPassword() || null == user.getDevice()) {
                 jsonResponse.put("success", false);
                 String missingField = null;
                 if (null == user.getEmail()) {
                     missingField = "email";
                 } else if (null == user.getPassword()) {
                     missingField = "password";
-                } else if (!paramsMap.containsKey("device")) {
+                } else if (null == user.getDevice()) {
                     missingField = "device";
                 }
                 jsonResponse.put("error", "Field " + missingField + " is required.");
@@ -126,8 +127,6 @@ public class MainApiServer {
                     jsonResponse.put("error", "Email already exist.");
                     return jsonResponse.toJSONString();
                 }
-
-
                 Database.getInstance().insertUserIntoUserTable(user);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -136,9 +135,8 @@ public class MainApiServer {
                 return jsonResponse.toJSONString();
             }
 
-
             jsonResponse.put("success", true);
-            jsonResponse.put("token", "a token should be here");
+            jsonResponse.put("token", user.getToken());
             response.status(200);          // set status code to 200
             response.type("application/json");     // set content type to application/json
             return jsonResponse;
