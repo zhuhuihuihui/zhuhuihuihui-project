@@ -217,6 +217,39 @@ public class Database {
         return true;
     }
 
+    public int insertBusinessWith(String businessName, String city, String address, int owner) throws SQLException {
+        Connection connection = this.getConnection();
+        int userID = -1;
+        if (null != connection) {
+            try {
+                String insertStatement =
+                        "Insert Into `business` (`businessName`, `city`, `address`, `owner`) " +
+                                "values " +
+                                "(?, ?, ?, ?);";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, businessName);
+                preparedStatement.setString(2, city);
+                preparedStatement.setString(3, address);
+                preparedStatement.setInt(4, owner);
+
+                preparedStatement.execute();
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        userID = generatedKeys.getInt(1);
+                    } else {
+                        //TODO: Remove user just added
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+            } finally {
+                if (null != connection) {
+                    connection.close();
+                }
+            }
+        }
+        return userID;
+    }
+
     private void keepAlive() {
         Connection connection = this.getConnection();
         if (null != connection) {
