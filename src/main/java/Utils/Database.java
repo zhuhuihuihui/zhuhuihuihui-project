@@ -208,7 +208,6 @@ public class Database {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
                 }
-
             } finally {
                 if (null != connection) {
                     connection.close();
@@ -216,10 +215,6 @@ public class Database {
             }
         }
         return true;
-    }
-
-    public boolean createTokenForUser(User user) throws SQLException {
-        return false;
     }
 
     private void keepAlive() {
