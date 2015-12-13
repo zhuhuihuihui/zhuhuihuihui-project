@@ -1,5 +1,6 @@
 package Utils;
 
+import DataModels.Business.Business;
 import DataModels.User.User;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
@@ -7,6 +8,7 @@ import com.jolbox.bonecp.BoneCPConfig;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -215,6 +217,44 @@ public class Database {
             }
         }
         return true;
+    }
+
+    public ArrayList<Business> getBusinessWith(String city, int limit) throws SQLException  {
+        ArrayList<Business> resultBusinesses  = null;
+        Connection connection = this.getConnection();
+        if (null != connection) {
+            try {
+                String queryStatement =
+                        "select businessID, businessName, city, state, address, latitude, longitude, rating, categories, avatar from business";
+                if (null != city) {
+                    queryStatement += " where city = '" + city + "'";
+                }
+                queryStatement += " limit " + limit + ";";
+                PreparedStatement preparedStatement = connection.prepareStatement(queryStatement, Statement.RETURN_GENERATED_KEYS);
+                if (true == preparedStatement.execute()) {
+                    ResultSet resultSet = preparedStatement.getResultSet();
+                    resultBusinesses = new ArrayList<>();
+                    while (resultSet.next()) {
+                        Business business = new Business(resultSet.getInt("businessID"));
+                        business.setBusinessName(resultSet.getString("businessName"));
+                        business.setCity(resultSet.getString("city"));
+                        business.setState(resultSet.getString("state"));
+                        business.setAddress(resultSet.getString("address"));
+                        business.setLatitude(resultSet.getDouble("latitude"));
+                        business.setLongitude(resultSet.getDouble("longitude"));
+                        business.setStarRating(resultSet.getFloat("rating"));
+                        business.setCategories(resultSet.getString("categories"));
+                        business.setPhotoURL(resultSet.getString("avatar"));
+                        resultBusinesses.add(business);
+                    }
+                }
+            } finally {
+                if (null != connection) {
+                    connection.close();
+                }
+            }
+        }
+        return resultBusinesses;
     }
 
     public int insertBusinessWith(String businessName, String city, String address, int owner) throws SQLException {
