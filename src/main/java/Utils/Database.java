@@ -226,7 +226,7 @@ public class Database {
             try {
                 String queryStatement =
                         "select businessID, businessName, city, state, address, latitude, longitude, rating, categories, avatar from business";
-                if (null != city) {
+                if (null != city && !city.isEmpty()) {
                     queryStatement += " where city = '" + city + "'";
                 }
                 queryStatement += " limit " + limit + ";";
