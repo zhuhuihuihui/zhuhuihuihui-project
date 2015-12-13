@@ -63,3 +63,80 @@
 ```
 
 ---
+
+##Businesses
+
+* Add Business
+
+    *Request*
+    `POST /business/add`
+    
+    Parameters   | Data Type     | Required / Optional | Description
+    ------------ | ------------- | ------------------- | -----------
+    token        | string        | Required            | this operation must be authorized
+    name         | string        | Required            | name of your business
+    city         | string        | Required            | city where your business located
+    address      | string        | Required            | address of your business
+    state        | string        | Optional            | state of your business
+    description  | string        | Optional            | write something about your business
+    
+    *Response*
+```json
+    {
+        "success": true,
+        "id": "id of your business"
+    }
+```
+
+```json
+    {
+        "success": false,
+        "error": "reason why your request failed"
+    }
+```
+
+* Get Business
+
+    *Request*
+    `POST /business/get`
+    
+    Parameters   | Data Type     | Required / Optional | Description
+    ------------ | ------------- | ------------------- | -----------
+    limit        | string        | Optional            | The number of businesses you want to fetch, if you're not specifying this param, it will be set to 10 by default, and it has a maximum of 50. 
+    city         | string        | Optional            | city where you want to fetch businesses from
+    id           | int           | Optional            | id of your business, if this param is specified, `city` `name` will be ignored
+    
+    *Response*
+> Nothing matched
+```json
+    []
+```
+> Businesses that matched
+```json
+    [
+      {
+        "address": "Clement",
+        "city": "San Francisco",
+        "latitude": 0.0,
+        "businessID": 12,
+        "businessName": "The Taste of Jiangnan",
+        "rating": 0.0,
+        "state": "CA",
+        "categories": null,
+        "avatar": null,
+        "longitude": 0.0
+      },
+      {
+        "address": "484 Ellis St, Tenderloin",
+        "city": "San Francisco",
+        "latitude": 37.7847191,
+        "businessID": 42,
+        "businessName": "Tadu Ethiopian Kitchen",
+        "rating": 0.0,
+        "state": "CA",
+        "categories": "Food",
+        "avatar": "http://s3-media3.fl.yelpcdn.com/bphoto/pUg-HAc0dCxV4iORG8NJZA/ms.jpg",
+        "longitude": -122.414172
+      },
+    ]
+```
