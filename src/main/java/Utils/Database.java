@@ -1,15 +1,18 @@
 package Utils;
 
 import DataModels.Business.Business;
+import DataModels.Review.Review;
 import DataModels.User.User;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.Date;
 
 /**
  * Created by Scott on 10/31/15.
@@ -102,6 +105,132 @@ public class Database {
         return null;
     }
 
+    public User getUserWithToken(String token) throws SQLException {
+        Connection connection = this.getConnection();
+        if (null != connection) {
+            try {
+                String queryStatement =
+                        "select user.id, user.email, user.nickname, user.birthday, user.gender, user.fromCity, user.university, user.avatorUrl from user INNER JOIN token on user.`id`=token.userID where token.token = '" + token + "';";
+                PreparedStatement preparedStatement = connection.prepareStatement(queryStatement);
+                if (true == preparedStatement.execute()) {
+                    ResultSet resultSet = preparedStatement.getResultSet();
+                    if (resultSet.next()) {
+                        User user = new User();
+                        user.setUserID(resultSet.getInt("id"));
+                        user.setEmail(resultSet.getString("email"));
+                        user.setNickname(resultSet.getString("nickname"));
+                        user.setBirthday(resultSet.getDate("birthday"));
+//                        user.setGender(resultSet.get("email"));
+                        user.setFromCity(resultSet.getString("fromCity"));
+                        user.setUniversity(resultSet.getString("university"));
+//                        user.setAvatorUrl(URL(resultSet.getString("avatorUrl")));
+                        return user;
+                    }
+                }
+            } finally {
+                if (null != connection) {
+                    connection.close();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**-----Reviews-----*/
+    public int insertReviewWith(int businessID, int userID, int starRating, String reviewText) throws SQLException {
+        int reviewID = -1;
+        Connection connection = this.getConnection();
+        if (null != connection) {
+            try {
+                String insertStatement =
+                        "Insert Into `review` (`businessID`, `userID`, `starRating`, `reviewText`, `reviewDate`) " +
+                                "values " +
+                                "(?, ?, ?, ?, ?);";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, businessID);
+                preparedStatement.setInt(2, userID);
+                preparedStatement.setInt(3, starRating);
+                preparedStatement.setString(4, reviewText);
+                preparedStatement.setDate(5, new java.sql.Date(new java.util.Date().getTime()));//Auto generate current time.
+                preparedStatement.execute();
+
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        reviewID = generatedKeys.getInt(1);
+                        return reviewID;
+                    } else {
+                        throw new SQLException("Creating review failed, no ID obtained.");
+                    }
+                }
+            } finally {
+                if (null != connection) {
+                    connection.close();
+                }
+            }
+        }
+        return reviewID;
+    }
+
+    public ArrayList<Review> getReviewWith(int limit, int businessID, String userEmail, int userID, String sortBy) throws SQLException {
+        ArrayList<Review> resultReviewss  = null;
+        Connection connection = this.getConnection();
+        if (null != connection) {
+            try {
+                String queryStatement =
+                        "select user.email, user.nickname, review.starRating, review.reviewText, review.reviewDate, review.reviewVote from review inner join user on review.userID=user.id";
+                if (businessID != -1) {
+                    queryStatement += " where review.businessID='" + businessID + "'";
+                    if (null != userEmail && !userEmail.isEmpty()) {
+                        queryStatement += " and user.email='" + userEmail + "'";
+                    } else if (userID != -1){
+                        queryStatement += " and user.id='" + userID + "'";
+                    }
+                } else {
+                    if (null != userEmail && !userEmail.isEmpty()) {
+                        queryStatement += " where user.email='" + userEmail + "'";
+                    } else if (userID != -1){
+                        queryStatement += " where user.id='" + userID + "'";
+                    }
+                }
+
+                if (null != sortBy && !sortBy.isEmpty()) {
+                    if (sortBy.equalsIgnoreCase("vote")) {
+                        queryStatement += " order by review.reviewVote";
+                    }
+                }
+
+                queryStatement += " limit " + limit + ";";
+                PreparedStatement preparedStatement = connection.prepareStatement(queryStatement, Statement.RETURN_GENERATED_KEYS);
+                if (true == preparedStatement.execute()) {
+                    ResultSet resultSet = preparedStatement.getResultSet();
+                    resultReviewss = new ArrayList<>();
+                    while (resultSet.next()) {
+                        Review review = new Review();
+                        review.setBusiness(new Business(businessID));
+                        User user = new User();
+                        user.setEmail(resultSet.getString("email"));
+                        user.setNickname(resultSet.getString("nickname"));
+                        review.setUser(user);
+                        review.setStarRating(resultSet.getInt("starRating"));
+                        review.setReviewText(resultSet.getString("reviewText"));
+                        review.setDate(resultSet.getDate("reviewDate"));
+                        review.setVotes(resultSet.getInt("reviewVote"));
+                        resultReviewss.add(review);
+                    }
+                }
+            } finally {
+                if (null != connection) {
+                    connection.close();
+                }
+            }
+        }
+        return resultReviewss;
+    }
+
+    /**-----Reviews-----*/
+
+
+
     public User checkUserPasswordMatches(User user) throws SQLException {
         if (null == user || null == user.getEmail() || user.getEmail().isEmpty()) return null;
         Connection connection = this.getConnection();
@@ -176,7 +305,7 @@ public class Database {
                 preparedStatement.setString(2, user.getNickname());
                 preparedStatement.setString(3, user.getEmail());
                 preparedStatement.setString(4, user.getPassword());
-                preparedStatement.setDate(5, null == user.getBirthday() ? null : new Date(user.getBirthday().getTime()));
+                preparedStatement.setDate(5, null == user.getBirthday() ? null : new java.sql.Date(user.getBirthday().getTime()));
                 preparedStatement.setString(6, null == user.getGender() ? null : user.getGender().toString());
                 preparedStatement.setString(7, user.getFromCity());
                 preparedStatement.setString(8, user.getUniversity());

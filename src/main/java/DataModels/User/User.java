@@ -27,6 +27,10 @@ public class User {
     private boolean isEmailVarified = false;
     private String device = null;
 
+    public User() {
+
+    }
+
     public User(Map userParamsMap) {
         if (null != userParamsMap.get("nickname")) {
             this.nickname = String.valueOf(((String[])userParamsMap.get("nickname"))[0]);
@@ -132,5 +136,45 @@ public class User {
 
     public String getDevice() {
         return device;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void setFromCity(String fromCity) {
+        this.fromCity = fromCity;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+
+    public void setAvatorUrl(URL avatorUrl) {
+        this.avatorUrl = avatorUrl;
+    }
+
+    public void setIsEmailVarified(boolean isEmailVarified) {
+        this.isEmailVarified = isEmailVarified;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
     }
 }

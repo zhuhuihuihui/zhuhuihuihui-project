@@ -1,4 +1,5 @@
 import DataModels.Business.Business;
+import DataModels.Review.Review;
 import DataModels.User.User;
 import Utils.Database;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -6,6 +7,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -151,7 +154,7 @@ public class MainApiServer {
 
             JSONArray jsonResponse = new JSONArray();
             ArrayList<Business> resultBusinesses = Database.getInstance().getBusinessWith(city, defaultLimit);
-            for (Business business: resultBusinesses) {
+            for (Business business : resultBusinesses) {
                 JSONObject businessJSON = new JSONObject();
                 businessJSON.put("businessID", business.getBusinessID());
                 businessJSON.put("businessName", business.getBusinessName());
@@ -167,6 +170,74 @@ public class MainApiServer {
             }
             return jsonResponse.toJSONString();
         });
+
+        post("/review/post", ((request, response) -> {
+            Map<String, String[]> paramsMap = request.queryMap().toMap();
+            JSONObject jsonResponse = new JSONObject();
+            /** 1. Check missing fields */
+            if (null == paramsMap.get("token") || null == paramsMap.get("businessID")) {
+                jsonResponse.put("success", false);
+                String missingField = null;
+                if (null == paramsMap.get("token") || String.valueOf(paramsMap.get("token")[0]).isEmpty()) {
+                    missingField = "token";
+                } else if (null == paramsMap.get("businessID") || String.valueOf(paramsMap.get("businessID")[0]).isEmpty()) {
+                    missingField = "businessID";
+                }
+                jsonResponse.put("error", "Field " + missingField + " is required.");
+                return jsonResponse.toJSONString();
+            }
+
+            User user = Database.getInstance().getUserWithToken(String.valueOf(paramsMap.get("token")[0]));
+            if (user.getUserID() != -1) {
+                Database.getInstance().insertReviewWith(Integer.valueOf(paramsMap.get("businessID")[0]), user.getUserID(), Integer.valueOf(paramsMap.get("starRating")[0]), String.valueOf(paramsMap.get("reviewText")[0]));
+            }
+            jsonResponse.put("success", true);
+            return jsonResponse.toJSONString();
+        }));
+
+        post("/review/get", ((request, response) -> {
+            Map<String, String[]> paramsMap = request.queryMap().toMap();
+            int defaultLimit = 10;
+            int businessID = -1;
+            String userEmail = null;
+            int userID = -1;
+            String sortBy = null;
+
+            if (null != paramsMap.get("limit") && Integer.valueOf(paramsMap.get("limit")[0]) > 0) {
+                defaultLimit = Integer.valueOf(paramsMap.get("limit")[0]);
+            }
+
+            if (null != paramsMap.get("businessID") && Integer.valueOf(paramsMap.get("businessID")[0]) > 0) {
+                businessID = Integer.valueOf(paramsMap.get("businessID")[0]);
+            }
+
+            if (null != paramsMap.get("userID") && Integer.valueOf(paramsMap.get("userID")[0]) > 0) {
+                businessID = Integer.valueOf(paramsMap.get("userID")[0]);
+            }
+
+            if (null != paramsMap.get("userEmail") && !String.valueOf(paramsMap.get("userEmail")[0]).isEmpty()) {
+                userEmail = String.valueOf(paramsMap.get("userEmail")[0]);
+            }
+
+            if (null != paramsMap.get("sortBy") && !String.valueOf(paramsMap.get("sortBy")[0]).isEmpty()) {
+                sortBy = String.valueOf(paramsMap.get("sortBy")[0]);
+            }
+
+            JSONArray jsonResponse = new JSONArray();
+            ArrayList<Review> resultReviews = Database.getInstance().getReviewWith(defaultLimit, businessID, userEmail, userID, sortBy);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            for (Review review : resultReviews) {
+                JSONObject reviewJSON = new JSONObject();
+                reviewJSON.put("userEmail", review.getUser().getEmail());
+                reviewJSON.put("userNickname", review.getUser().getNickname());
+                reviewJSON.put("starRating", review.getStarRating());
+                reviewJSON.put("reviewText", review.getReviewText());
+                reviewJSON.put("reviewDate", dateFormat.format(review.getDate()));
+                reviewJSON.put("reviewVote", review.getVotes());
+                jsonResponse.add(reviewJSON);
+            }
+            return jsonResponse.toJSONString();
+        }));
 
 //        post("/business/add", (request, response) -> {
 //            Map<String, String[]> paramsMap = request.queryMap().toMap();
