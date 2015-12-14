@@ -107,11 +107,15 @@
     id           | int           | Optional            | id of your business, if this param is specified, `city` `name` will be ignored
     
     *Response*
+    
 > Nothing matched
+
 ```json
     []
 ```
+
 > Businesses that matched
+
 ```json
     [
       {
@@ -140,6 +144,7 @@
       },
     ]
 ```
+
 ##Reviews
 
 * Post Review
