@@ -7,10 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff60ba93-83d9-4429-915e-8e869b240b2b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Utils/Database.java" afterPath="$PROJECT_DIR$/src/main/java/Utils/Database.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/MainApiServer.java" afterPath="$PROJECT_DIR$/src/main/java/MainApiServer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/DataModels/Review/Review.java" afterPath="$PROJECT_DIR$/src/main/java/DataModels/Review/Review.java" />
     </list>
     <ignored path="zhuhuihuihui-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -96,8 +93,8 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6440129">
-              <caret line="186" column="10" selection-start-line="186" selection-start-column="4" selection-end-line="186" selection-end-column="10" />
+            <state vertical-scroll-proportion="0.96763754">
+              <caret line="209" column="5" selection-start-line="209" selection-start-column="5" selection-end-line="209" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -136,10 +133,10 @@
         <option value="$PROJECT_DIR$/src/main/java/DataModels/Review/VOTE_TYPE.java" />
         <option value="$PROJECT_DIR$/src/main/java/DataModels/Business/Business.java" />
         <option value="$PROJECT_DIR$/src/main/java/DataModels/User/User.java" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/main/java/DataModels/Review/Review.java" />
         <option value="$PROJECT_DIR$/src/main/java/Utils/Database.java" />
         <option value="$PROJECT_DIR$/src/main/java/MainApiServer.java" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -1318,8 +1315,8 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6440129">
-          <caret line="186" column="10" selection-start-line="186" selection-start-column="4" selection-end-line="186" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.96763754">
+          <caret line="209" column="5" selection-start-line="209" selection-start-column="5" selection-end-line="209" selection-end-column="5" />
           <folding />
         </state>
       </provider>

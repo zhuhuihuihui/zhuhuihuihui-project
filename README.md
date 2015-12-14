@@ -188,16 +188,24 @@
     sortBy       | string        | Optional            | 'vote' or something else
     
     *Response*
-    
-```json
-    {
-        "success": true,
-    }
-```
 
 ```json
-    {
-        "success": false,
-        "error": "reason why your request failed"
-    }
+    [
+      {
+        "reviewDate": "2015-12-12",
+        "userNickname": "scott",
+        "userEmail": "scott@gmail.com",
+        "starRating": 5,
+        "reviewText": "First review!!!",
+        "reviewVote": 0
+      },
+      {
+        "reviewDate": "2015-12-13",
+        "userNickname": "scott",
+        "userEmail": "newUserWithTOken@gmail.com",
+        "starRating": 10,
+        "reviewText": "This is awosome!!",
+        "reviewVote": 0
+      }
+    ]
 ```
