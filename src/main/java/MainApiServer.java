@@ -168,6 +168,13 @@ public class MainApiServer {
             return jsonResponse.toJSONString();
         });
 
+        post("/review/post", ((request, response) -> {
+            Map<String, String[]> paramsMap = request.queryMap().toMap();
+
+            JSONObject jsonResponse = new JSONObject();
+            return jsonResponse.toJSONString();
+        }));
+
 //        post("/business/add", (request, response) -> {
 //            Map<String, String[]> paramsMap = request.queryMap().toMap();
 ////            User user = new User(paramsMap);
