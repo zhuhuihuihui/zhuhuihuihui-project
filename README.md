@@ -98,7 +98,7 @@
 * Get Business
 
     *Request*
-    `POST /business/get`
+    `GET /business/get`
     
     Parameters   | Data Type     | Required / Optional | Description
     ------------ | ------------- | ------------------- | -----------
@@ -150,7 +150,7 @@
 * Post Review
 
 *Request*
-    `POST /business/add`
+    `POST /review/post`
     
     Parameters   | Data Type     | Required / Optional | Description
     ------------ | ------------- | ------------------- | -----------
@@ -160,6 +160,34 @@
     reviewText   | string        | Optional            | your review
     
     *Response*
+    
+```json
+    {
+        "success": true,
+    }
+```
+
+```json
+    {
+        "success": false,
+        "error": "reason why your request failed"
+    }
+```
+
+* Get Review
+
+*Request*
+    `POST /review/post`
+    
+    Parameters   | Data Type     | Required / Optional | Description
+    ------------ | ------------- | ------------------- | -----------
+    token        | string        | Required            | this operation must be authorized
+    businessID   | Int           | Required            | id of the business
+    starRating   | Int           | Optional            | from 1 - 10
+    reviewText   | string        | Optional            | your review
+    
+    *Response*
+    
 ```json
     {
         "success": true,

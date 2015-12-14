@@ -3,6 +3,7 @@ package DataModels.Review;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by Scott on 8/29/15.
@@ -20,6 +21,15 @@ public class Review {
     /**---------------------------------
      * ----------- Constructors --------
      * ---------------------------------*/
+//    public Review(Map reviewParamsMap) {
+////        if (null != reviewParamsMap.get("token")) {
+////            this.nickname = String.valueOf(((String[])reviewParamsMap.get("nickname"))[0]);
+////        }
+////
+////        if (null != reviewParamsMap.get("email")) {
+////            this.email = String.valueOf(((String[])reviewParamsMap.get("email"))[0]);
+////        }
+//    }
 
     /** Both business and userID are crucial to a review*/
     public Review(int businessID, int userID) {
