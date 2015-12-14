@@ -102,7 +102,7 @@
     
     Parameters   | Data Type     | Required / Optional | Description
     ------------ | ------------- | ------------------- | -----------
-    limit        | string        | Optional            | The number of businesses you want to fetch, if you're not specifying this param, it will be set to 10 by default, and it has a maximum of 50. 
+    limit        | Int           | Optional            | The number of businesses you want to fetch, if you're not specifying this param, it will be set to 10 by default, and it has a maximum of 50. 
     city         | string        | Optional            | city where you want to fetch businesses from
     id           | int           | Optional            | id of your business, if this param is specified, `city` `name` will be ignored
     
@@ -177,14 +177,15 @@
 * Get Review
 
 *Request*
-    `POST /review/post`
+    `POST /review/get`
     
     Parameters   | Data Type     | Required / Optional | Description
     ------------ | ------------- | ------------------- | -----------
-    token        | string        | Required            | this operation must be authorized
-    businessID   | Int           | Required            | id of the business
-    starRating   | Int           | Optional            | from 1 - 10
-    reviewText   | string        | Optional            | your review
+    limit        | string        | Optional            | the number of reviews you want to fetch, 10 by default
+    businessID   | Int           | Optional            | id of the business
+    userEmail    | string        | Optional            | user who wrote this review
+    userID       | Int           | Optional            | user who wrote this review by ID
+    sortBy       | string        | Optional            | 'vote' or something else
     
     *Response*
     
