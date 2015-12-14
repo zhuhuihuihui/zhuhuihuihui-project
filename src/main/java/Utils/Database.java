@@ -1,6 +1,7 @@
 package Utils;
 
 import DataModels.Business.Business;
+import DataModels.Review.Review;
 import DataModels.User.User;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
@@ -168,6 +169,62 @@ public class Database {
             }
         }
         return reviewID;
+    }
+
+    public ArrayList<Review> getReviewWith(int limit, int businessID, String userEmail, int userID, String sortBy) throws SQLException {
+        ArrayList<Review> resultReviewss  = null;
+        Connection connection = this.getConnection();
+        if (null != connection) {
+            try {
+                String queryStatement =
+                        "select user.email, user.nickname, review.starRating, review.reviewText, review.reviewDate, review.reviewVote from review inner join user on review.userID=user.id";
+                if (businessID != -1) {
+                    queryStatement += " where review.businessID='" + businessID + "'";
+                    if (null != userEmail && !userEmail.isEmpty()) {
+                        queryStatement += " and user.email='" + userEmail + "'";
+                    } else if (userID != -1){
+                        queryStatement += " and user.id='" + userID + "'";
+                    }
+                } else {
+                    if (null != userEmail && !userEmail.isEmpty()) {
+                        queryStatement += " where user.email='" + userEmail + "'";
+                    } else if (userID != -1){
+                        queryStatement += " where user.id='" + userID + "'";
+                    }
+                }
+
+                if (null != sortBy && !sortBy.isEmpty()) {
+                    if (sortBy.equalsIgnoreCase("vote")) {
+                        queryStatement += " order by review.reviewVote";
+                    }
+                }
+
+                queryStatement += " limit " + limit + ";";
+                PreparedStatement preparedStatement = connection.prepareStatement(queryStatement, Statement.RETURN_GENERATED_KEYS);
+                if (true == preparedStatement.execute()) {
+                    ResultSet resultSet = preparedStatement.getResultSet();
+                    resultReviewss = new ArrayList<>();
+                    while (resultSet.next()) {
+                        Review review = new Review();
+                        review.setBusiness(new Business(businessID));
+                        User user = new User();
+                        user.setEmail(resultSet.getString("email"));
+                        user.setNickname(resultSet.getString("nickname"));
+                        review.setUser(user);
+                        review.setStarRating(resultSet.getInt("starRating"));
+                        review.setReviewText(resultSet.getString("reviewText"));
+                        review.setDate(resultSet.getDate("reviewDate"));
+                        review.setVotes(resultSet.getInt("reviewVote"));
+                        resultReviewss.add(review);
+                    }
+                }
+            } finally {
+                if (null != connection) {
+                    connection.close();
+                }
+            }
+        }
+        return resultReviewss;
     }
 
     /**-----Reviews-----*/

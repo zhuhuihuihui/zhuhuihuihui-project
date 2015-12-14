@@ -181,7 +181,7 @@
     
     Parameters   | Data Type     | Required / Optional | Description
     ------------ | ------------- | ------------------- | -----------
-    limit        | string        | Optional            | the number of reviews you want to fetch, 10 by default
+    limit        | Int           | Optional            | the number of reviews you want to fetch, 10 by default
     businessID   | Int           | Optional            | id of the business
     userEmail    | string        | Optional            | user who wrote this review
     userID       | Int           | Optional            | user who wrote this review by ID
