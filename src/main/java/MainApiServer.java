@@ -5,6 +5,9 @@ import Utils.Database;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import spark.Filter;
+import spark.Request;
+import spark.Response;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -22,6 +25,8 @@ public class MainApiServer {
         port(Integer.valueOf(System.getenv("PORT") == null ? "8080": System.getenv("PORT")));
         staticFileLocation("/public");
 
+        enableCORS("*", "*", "*");
+        
         Database.getInstance().getUserWithEmail("");
 
         get("/", (req, res) -> "Hello World from api");
@@ -281,5 +286,16 @@ public class MainApiServer {
 //
 //
 //        });
+    }
+
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+        before(new Filter() {
+            @Override
+            public void handle(Request request, Response response) {
+                response.header("Access-Control-Allow-Origin", origin);
+                response.header("Access-Control-Request-Method", methods);
+                response.header("Access-Control-Allow-Headers", headers);
+            }
+        });
     }
 }
