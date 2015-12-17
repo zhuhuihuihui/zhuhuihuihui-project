@@ -26,7 +26,7 @@ public class MainApiServer {
         staticFileLocation("/public");
 
         enableCORS("*", "*", "*");
-        
+
         Database.getInstance().getUserWithEmail("");
 
         get("/", (req, res) -> "Hello World from api");
@@ -180,11 +180,11 @@ public class MainApiServer {
             Map<String, String[]> paramsMap = request.queryMap().toMap();
             JSONObject jsonResponse = new JSONObject();
             /** 1. Check missing fields */
-            if (null == paramsMap.get("token") || null == paramsMap.get("businessID")) {
+            if (null == paramsMap.get("key") || null == paramsMap.get("businessID")) {
                 jsonResponse.put("success", false);
                 String missingField = null;
-                if (null == paramsMap.get("token") || String.valueOf(paramsMap.get("token")[0]).isEmpty()) {
-                    missingField = "token";
+                if (null == paramsMap.get("key") || String.valueOf(paramsMap.get("key")[0]).isEmpty()) {
+                    missingField = "key";
                 } else if (null == paramsMap.get("businessID") || String.valueOf(paramsMap.get("businessID")[0]).isEmpty()) {
                     missingField = "businessID";
                 }
@@ -192,7 +192,7 @@ public class MainApiServer {
                 return jsonResponse.toJSONString();
             }
 
-            User user = Database.getInstance().getUserWithToken(String.valueOf(paramsMap.get("token")[0]));
+            User user = Database.getInstance().getUserWithToken(String.valueOf(paramsMap.get("key")[0]));
             if (user.getUserID() != -1) {
                 Database.getInstance().insertReviewWith(Integer.valueOf(paramsMap.get("businessID")[0]), user.getUserID(), Integer.valueOf(paramsMap.get("starRating")[0]), String.valueOf(paramsMap.get("reviewText")[0]));
             }
