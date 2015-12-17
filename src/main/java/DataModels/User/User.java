@@ -79,7 +79,7 @@ public class User {
             this.device = String.valueOf(((String[])userParamsMap.get("device"))[0]);
         }
 
-        this.token = UUID.randomUUID().toString().substring(0,20);
+        this.token = UUID.randomUUID().toString();
     }
 
     public int getUserID() {

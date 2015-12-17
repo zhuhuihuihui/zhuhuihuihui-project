@@ -46,7 +46,7 @@ public class MainApiServer {
     }
 
     public static void main(String[] args) {
-        port(Integer.valueOf(System.getenv("PORT") == null ? "8080": System.getenv("PORT")));
+        port(Integer.valueOf(System.getenv("PORT") == null ? "8090": System.getenv("PORT")));
         staticFileLocation("/public");
 
 //        enableCORS("*", "HEAD, GET, POST, PUT, DELETE, OPTIONS, TRACE", "Content-Type, token");
@@ -204,6 +204,7 @@ public class MainApiServer {
         post("/review/post", ((request, response) -> {
             Map<String, String[]> paramsMap = request.queryMap().toMap();
             JSONObject jsonResponse = new JSONObject();
+            System.out.println(request);
             /** 1. Check missing fields */
             if (null == paramsMap.get("key") || null == paramsMap.get("businessID")) {
                 jsonResponse.put("success", false);
