@@ -206,10 +206,10 @@ public class MainApiServer {
             JSONObject jsonResponse = new JSONObject();
             System.out.println(request);
             /** 1. Check missing fields */
-            if (null == paramsMap.get("key") || null == paramsMap.get("businessID")) {
+            if (null == paramsMap.get("post") || null == paramsMap.get("businessID")) {
                 jsonResponse.put("success", false);
                 String missingField = null;
-                if (null == paramsMap.get("key") || String.valueOf(paramsMap.get("key")[0]).isEmpty()) {
+                if (null == paramsMap.get("post") || String.valueOf(paramsMap.get("post")[0]).isEmpty()) {
                     missingField = "key";
                 } else if (null == paramsMap.get("businessID") || String.valueOf(paramsMap.get("businessID")[0]).isEmpty()) {
                     missingField = "businessID";
@@ -312,17 +312,5 @@ public class MainApiServer {
 //
 //
 //        });
-    }
-
-    private static void enableCORS(final String origin, final String methods, final String headers) {
-        before(new Filter() {
-            @Override
-            public void handle(Request request, Response response) {
-                System.out.println("Header set!!");
-                response.header("Access-Control-Allow-Origin", origin);
-                response.header("Access-Control-Request-Method", methods);
-                response.header("Access-Control-Allow-Headers", headers);
-            }
-        });
     }
 }
