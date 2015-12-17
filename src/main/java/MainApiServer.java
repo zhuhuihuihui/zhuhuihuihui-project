@@ -25,7 +25,7 @@ public class MainApiServer {
         port(Integer.valueOf(System.getenv("PORT") == null ? "8080": System.getenv("PORT")));
         staticFileLocation("/public");
 
-        enableCORS("*", "*", "*");
+        enableCORS("*", "HEAD, GET, POST, PUT, DELETE, OPTIONS, TRACE", "Content-Type, token");
 
         Database.getInstance().getUserWithEmail("");
 
@@ -292,6 +292,7 @@ public class MainApiServer {
         before(new Filter() {
             @Override
             public void handle(Request request, Response response) {
+                System.out.println("Header set!!");
                 response.header("Access-Control-Allow-Origin", origin);
                 response.header("Access-Control-Request-Method", methods);
                 response.header("Access-Control-Allow-Headers", headers);
